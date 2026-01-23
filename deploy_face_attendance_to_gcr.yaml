@@ -1,0 +1,24 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    script: |
+      docker build -f face_attendance/service/Dockerfile -t $SERVICE_NAME .
+      docker tag $SERVICE_NAME $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$SERVICE_NAME:$IMAGE_TAG
+      docker push $LOCATION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$SERVICE_NAME:$IMAGE_TAG
+    env:
+      - 'PROJECT_ID=$PROJECT_ID'
+      - 'LOCATION=$LOCATION'
+      - 'REPO_NAME=$_REPO_NAME'
+      - 'SERVICE_NAME=$_SERVICE_NAME'
+      - 'IMAGE_TAG=$_IMAGE_TAG'
+  - name: google/cloud-sdk:429.0.0
+    args: [ './scripts/deploy_face_attendance_to_gcr.sh' ]
+    env:
+      - 'PROJECT_ID=$PROJECT_ID'
+      - 'LOCATION=$LOCATION'
+      - 'REPO_NAME=$_REPO_NAME'
+      - 'SERVICE_NAME=$_SERVICE_NAME'
+      - 'IMAGE_TAG=$_IMAGE_TAG'
+      - 'SUPABASE_URL=$_SUPABASE_URL'
+      - 'SUPABASE_KEY=$_SUPABASE_KEY'
+      - 'JWT_SECRET=$_JWT_SECRET'
+      - 'JWT_ALGORITHM=$_JWT_ALGORITHM'
