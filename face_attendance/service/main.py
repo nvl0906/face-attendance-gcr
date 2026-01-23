@@ -29,9 +29,6 @@ import uvicorn
 # Load .env
 load_dotenv()
 
-GPS_ID = "00000000-0000-0000-0000-000000000001"
-DIST_ID = "00000000-0000-0000-0000-000000000002"
-
 # Initialize Supabase
 url: str = os.environ.get("SUPABASE_URL")
 key: str = os.environ.get("SUPABASE_KEY")
@@ -536,6 +533,7 @@ async def set_gps_admin(latitude: float = Form(...), longitude: float = Form(...
 
     # Update GPS location for admin
     def upsert_gps():
+        GPS_ID = "00000000-0000-0000-0000-000000000001"
         supabase.table("gps").upsert({"id": GPS_ID, "latitude": latitude, "longitude": longitude}).execute()
 
     await asyncio.to_thread(upsert_gps)
@@ -550,6 +548,7 @@ async def update_distance(payload: dict = Body(...), current_user=Depends(get_cu
     dist = payload.get("dist")
     # Update GPS location for admin
     def upsert_distance():
+        DIST_ID = "00000000-0000-0000-0000-000000000002"
         supabase.table("distance").upsert({"id": DIST_ID, "dist": dist}).execute()
 
     await asyncio.to_thread(upsert_distance)
