@@ -537,7 +537,7 @@ async def set_gps_admin(latitude: float = Form(...), longitude: float = Form(...
         supabase.table("gps").upsert({"id": GPS_ID, "latitude": latitude, "longitude": longitude}).execute()
 
     await asyncio.to_thread(upsert_gps)
-    return {"message":"GPS enregistré avec succès"}
+    return {"message":"GPS enregistré"}
 
 @app.post("/v2/update-dist")
 async def update_distance(payload: dict = Body(...), current_user=Depends(get_current_user)):
